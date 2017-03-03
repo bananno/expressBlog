@@ -1,7 +1,7 @@
 {
-  "name": "practice-express-auth",
+  "name": "express-blog",
   "version": "1.0.0",
-  "description": "A project for learning how to add authentication to a web application.",
+  "description": "A simple multiple-user blog constructed with ExpressJS and MongoDB for learning purposes.",
   "author": "Travis Overby",
   "private": true,
   "scripts": {
