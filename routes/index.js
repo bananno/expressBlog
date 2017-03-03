@@ -15,14 +15,18 @@ router.get('/profile', mid.requiresLogin, (req, res, next) => {
 			if (error) {
 				return next(error);
 			} else {
-        return res.render('profile', { 
-          title: 'Profile', 
-          name: user.name, 
-          info: user.personalInfo 
+        return res.render('profile', {
+          title: 'Profile',
+          name: user.name,
+          info: user.personalInfo
         });
       }
 		});
 });
+
+router.get('/about', (req, res, next) => {
+  res.render('about');
+})
 
 // GET /register
 router.get('/register', mid.loggedOut, (req, res, next) => {
@@ -54,8 +58,8 @@ router.post('/register', (req, res, next) => {
 
     // use schema's "create" method to insert document into Mongo
     User.create(userData, (err, user) => {
-      if (error) {
-        return next(error);
+      if (err) {
+        return next(err);
       } else {
         req.session.userId = user._id;
         return res.redirect('/profile');
@@ -68,6 +72,18 @@ router.post('/register', (req, res, next) => {
     return next(err);
   }
 
+});
+
+router.get('/logout', (req, res, next) => {
+  if (req.session) {
+    req.session.destroy(err => {
+      if (err) {
+        return next(err);
+      } else {
+        return res.redirect('/');
+      }
+    });
+  }
 });
 
 module.exports = router;
