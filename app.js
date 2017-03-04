@@ -29,6 +29,8 @@ app.use((req, res, next) => {
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }))
 
+app.use(express.static(__dirname + '/public'));
+
 // view engine setup
 // sets up Pug template engine so we don't have to use HTML
 app.set('view engine', 'pug');
