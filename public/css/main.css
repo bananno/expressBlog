@@ -1,3 +1,12 @@
-body {
-    background-color: blue;
+
+.navbar ul li {
+    display: inline;
+    border: 2px solid black;
+    margin-right: 10px;
+    padding: 10px;
+}
+
+.navbar ul li a {
+    text-decoration: none;
+    color: black;
 }
