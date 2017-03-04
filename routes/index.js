@@ -26,11 +26,30 @@ router.get('/profile', mid.requiresLogin, (req, res, next) => {
 
 router.get('/about', (req, res, next) => {
   res.render('about');
-})
+});
 
-// GET /register
+router.get('/contact', (req, res, next) => {
+  res.render('contact');
+});
+
 router.get('/register', mid.loggedOut, (req, res, next) => {
   return res.render('register', {title: 'Sign Up'});
+});
+
+router.get('/login', mid.loggedOut, (req, res, next) => {
+  res.render('login', { title: 'Log In' });
+});
+
+router.get('/logout', (req, res, next) => {
+  if (req.session) {
+    req.session.destroy(err => {
+      if (err) {
+        return next(err);
+      } else {
+        return res.redirect('/');
+      }
+    });
+  }
 });
 
 //POST /register
@@ -71,18 +90,24 @@ router.post('/register', (req, res, next) => {
     err.status = 400;
     return next(err);
   }
-
 });
 
-router.get('/logout', (req, res, next) => {
-  if (req.session) {
-    req.session.destroy(err => {
-      if (err) {
-        return next(err);
+router.post('/login', (req, res, next) => {
+  if (req.body.email && req.body.password) {
+    User.authenticate(req.body.email, req.body.password, (err, user) => {
+      if (err || !user) {
+        const error = new Error('Wrong email address or password.');
+        error.status = 401;
+        return next(error);
       } else {
-        return res.redirect('/');
+        req.session.userId = user._id;
+        return res.redirect('/profile');
       }
     });
+  } else {
+    const error = new Error('Email and password are required!');
+    error.status = 401;
+    return next(error);
   }
 });
 
